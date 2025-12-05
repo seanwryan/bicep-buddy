@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import FuelGauge from "@/components/FuelGauge";
 import AISuggestions from "@/components/AISuggestions";
 import { useApp } from "../context/AppContext";
-import { RIR, WorkoutDay } from "@/lib/apex-data";
+import { RIR, WorkoutDay, getWorkoutDayDescription } from "@/lib/apex-data";
 import {
   WorkoutSession,
   LoggedSet,
@@ -199,7 +199,10 @@ function SessionContent() {
             Back to Plan
           </button>
           <h1 className="text-3xl font-bold mb-2">{currentWorkout.name}</h1>
-          <p className="text-slate-400">Track your sets with RIR</p>
+          <p className="text-slate-400 mb-2">Track your sets with RIR</p>
+          <p className="text-sm text-slate-500 bg-slate-900/50 border border-slate-800 rounded-lg p-3">
+            {getWorkoutDayDescription(currentWorkout.name)}
+          </p>
         </div>
 
         {/* Exercise List */}
@@ -221,14 +224,25 @@ function SessionContent() {
                 }`}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <div>
+                  <div className="flex-1">
                     <h3 className="text-xl font-bold">{exercise.name}</h3>
                     <div className="text-sm text-slate-400 font-mono mt-1">
                       {exercise.sets}×{exercise.reps}
                     </div>
+                    {exercise.movementPattern && (
+                      <div className="text-xs text-slate-500 mt-1">
+                        {exercise.movementPattern}
+                      </div>
+                    )}
+                    {exercise.reasoning && (
+                      <div className="text-xs text-slate-400 mt-2 p-2 bg-slate-800/50 border border-slate-700 rounded">
+                        <span className="text-blue-500 font-semibold">Why: </span>
+                        {exercise.reasoning}
+                      </div>
+                    )}
                   </div>
                   {isComplete && (
-                    <CheckCircle2 className="w-6 h-6 text-blue-500" />
+                    <CheckCircle2 className="w-6 h-6 text-blue-500 ml-4" />
                   )}
                 </div>
 

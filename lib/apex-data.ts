@@ -364,6 +364,42 @@ export function getSwapAlternatives(exerciseName: string): string[] {
   return exerciseDatabase[exerciseName]?.alternatives || [];
 }
 
+// Workout day descriptions
+export function getWorkoutDayDescription(dayName: string): string {
+  const descriptions: Record<string, string> = {
+    "Push Day 1": "Focus on chest, shoulders, and triceps. Heavy compound movements followed by isolation work.",
+    "Pull Day 1": "Target back, biceps, and rear delts. Vertical and horizontal pulling patterns for complete back development.",
+    "Leg Day 1": "Complete lower body training: quads, hamstrings, glutes, and calves. Heavy squats and deadlifts.",
+    "Dynamic Shoulder Warmup": "5-minute mobility routine to prepare shoulders for heavy pressing. Includes rotator cuff activation and scapular mobility drills.",
+    "Dynamic Back Warmup": "Activates lats and scapular retractors. Prepares posterior chain for heavy pulling movements.",
+    "Dynamic Lower Body Warmup": "Hip mobility and activation drills. Prepares hip flexors, glutes, and quads for heavy loading.",
+  };
+  
+  // Try exact match first
+  if (descriptions[dayName]) {
+    return descriptions[dayName];
+  }
+  
+  // Try partial matches for variations
+  if (dayName.includes("Push")) {
+    return "Focus on chest, shoulders, and triceps. Heavy compound movements followed by isolation work.";
+  }
+  if (dayName.includes("Pull")) {
+    return "Target back, biceps, and rear delts. Vertical and horizontal pulling patterns for complete back development.";
+  }
+  if (dayName.includes("Leg") || dayName.includes("Lower")) {
+    return "Complete lower body training: quads, hamstrings, glutes, and calves. Heavy squats and deadlifts.";
+  }
+  if (dayName.includes("Upper")) {
+    return "Upper body focus: chest, back, shoulders, arms. Combines pushing and pulling movements.";
+  }
+  if (dayName.includes("Full Body")) {
+    return "Complete body workout hitting all major muscle groups in one session. Great for time efficiency.";
+  }
+  
+  return "Workout designed to target specific muscle groups with optimal exercise selection.";
+}
+
 // Mock cohort members
 export const mockCohortMembers: CohortMember[] = [
   {

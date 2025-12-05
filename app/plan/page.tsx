@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useApp } from "../context/AppContext";
 import { getWeeklyReview, getWorkoutsForDay } from "@/lib/workout-storage";
+import { getWorkoutDayDescription } from "@/lib/apex-data";
 import { Calendar, ChevronLeft, ChevronRight, CheckCircle2, Clock } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -191,8 +192,11 @@ export default function PlanPage() {
                 <div className="text-lg font-bold mb-1">{date.getDate()}</div>
                 {workout && (
                   <>
-                    <div className="text-xs text-center text-slate-400 mb-2">
+                    <div className="text-xs text-center font-semibold mb-1">
                       {workout.dayName}
+                    </div>
+                    <div className="text-[10px] text-center text-slate-500 leading-tight px-1 mb-2">
+                      {getWorkoutDayDescription(workout.dayName)}
                     </div>
                     {completed ? (
                       <CheckCircle2 className="w-5 h-5 text-green-500" />

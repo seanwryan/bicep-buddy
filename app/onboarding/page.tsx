@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useApp } from "../context/AppContext";
 import { generatePlan, UserProfile, GeneratedPlan, SplitPreference, FocusArea, getSwapAlternatives } from "@/lib/apex-data";
-import { ArrowRight, ArrowLeft, Sparkles, CheckCircle2, X, Info, RefreshCw } from "lucide-react";
+import { ArrowRight, ArrowLeft, Sparkles, CheckCircle2, X, RefreshCw } from "lucide-react";
 
 type Step = 1 | 2 | 3;
 
@@ -17,7 +17,6 @@ export default function OnboardingPage() {
   const [generatedPlan, setGeneratedPlan] = useState<GeneratedPlan | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [editingPlan, setEditingPlan] = useState(false);
-  const [showWhy, setShowWhy] = useState<string | null>(null);
   const [showSwap, setShowSwap] = useState<string | null>(null);
 
   const handleGenerate = () => {
@@ -176,22 +175,33 @@ export default function OnboardingPage() {
                   <label className="block text-sm font-medium text-slate-300 mb-2">
                     Metabolism Type
                   </label>
+                  <p className="text-xs text-slate-500 mb-3">
+                    Not sure? Choose "Normal" if you're unsure. Fast = high calorie burn, quick recovery. Slow = lower calorie burn, slower recovery.
+                  </p>
                   <div className="grid grid-cols-3 gap-3">
-                    {(["Fast", "Normal", "Slow"] as const).map((type) => (
-                      <button
-                        key={type}
-                        onClick={() =>
-                          setProfile({ ...profile, metabolismType: type })
-                        }
-                        className={`px-4 py-3 rounded-lg border-2 transition-colors ${
-                          profile.metabolismType === type
-                            ? "border-blue-500 bg-blue-500/10"
-                            : "border-slate-800 bg-slate-900 hover:border-slate-700"
-                        }`}
-                      >
-                        {type}
-                      </button>
-                    ))}
+                    {(["Fast", "Normal", "Slow"] as const).map((type) => {
+                      const descriptions: Record<string, string> = {
+                        Fast: "High calorie burn, quick recovery. Can handle more volume.",
+                        Normal: "Average metabolism. Balanced approach works best.",
+                        Slow: "Lower calorie burn, slower recovery. Focus on quality over quantity.",
+                      };
+                      return (
+                        <button
+                          key={type}
+                          onClick={() =>
+                            setProfile({ ...profile, metabolismType: type })
+                          }
+                          className={`px-4 py-3 rounded-lg border-2 transition-colors text-left ${
+                            profile.metabolismType === type
+                              ? "border-blue-500 bg-blue-500/10"
+                              : "border-slate-800 bg-slate-900 hover:border-slate-700"
+                          }`}
+                        >
+                          <div className="font-semibold mb-1">{type}</div>
+                          <div className="text-xs text-slate-400">{descriptions[type]}</div>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -355,12 +365,6 @@ export default function OnboardingPage() {
                               <div className="flex-1">
                                 <div className="flex items-center gap-2">
                                   <div className="font-semibold">{exercise.name}</div>
-                                  <button
-                                    onClick={() => setShowWhy(showWhy === exercise.id ? null : exercise.id)}
-                                    className="p-1 hover:bg-blue-500/20 rounded transition-colors"
-                                  >
-                                    <Info className="w-4 h-4 text-blue-500" />
-                                  </button>
                                   {exercise.alternatives && exercise.alternatives.length > 0 && (
                                     <button
                                       onClick={() => setShowSwap(showSwap === exercise.id ? null : exercise.id)}
@@ -378,6 +382,12 @@ export default function OnboardingPage() {
                                     {exercise.movementPattern}
                                   </div>
                                 )}
+                                {exercise.reasoning && (
+                                  <div className="text-xs text-slate-400 mt-2 p-2 bg-slate-900/50 border border-slate-700 rounded">
+                                    <span className="text-blue-500 font-semibold">Why: </span>
+                                    {exercise.reasoning}
+                                  </div>
+                                )}
                               </div>
                               {editingPlan && (
                                 <button
@@ -386,16 +396,6 @@ export default function OnboardingPage() {
                                 >
                                   <X className="w-4 h-4 text-red-500" />
                                 </button>
-                              )}
-
-                              {/* Why Tooltip */}
-                              {showWhy === exercise.id && exercise.reasoning && (
-                                <div className="absolute left-0 right-0 top-full mt-2 p-4 bg-slate-900 border-2 border-blue-500/50 rounded-lg z-10 shadow-xl">
-                                  <div className="text-sm">
-                                    <div className="font-semibold text-blue-500 mb-2">AI Reasoning:</div>
-                                    <p className="text-slate-300">{exercise.reasoning}</p>
-                                  </div>
-                                </div>
                               )}
 
                               {/* Swap Menu */}
