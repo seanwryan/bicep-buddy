@@ -337,6 +337,368 @@ export function generatePlan(profile: UserProfile): GeneratedPlan {
       name: "Leg Day 1",
       exercises: legExercises,
     });
+  } else if (split === "Upper/Lower") {
+    // Upper Day
+    const upperExercises: Exercise[] = [];
+    if (hasMobility) {
+      upperExercises.push({
+        id: "warmup-upper",
+        name: "Dynamic Shoulder Warmup",
+        movementPattern: "Warmup",
+        muscleGroup: "Shoulders",
+        sets: 1,
+        reps: 10,
+        reasoning: "5-minute dynamic warmup targeting shoulder mobility and activation. Prepares rotator cuff and scapular stabilizers for heavy pressing.",
+        alternatives: [],
+      });
+    }
+    upperExercises.push({
+      id: "ex-upper-1",
+      name: "Barbell Bench Press",
+      movementPattern: "Horizontal Push",
+      muscleGroup: "Chest",
+      sets: 4,
+      reps: 8,
+      ...exerciseDatabase["Barbell Bench Press"],
+    });
+    upperExercises.push({
+      id: "ex-upper-2",
+      name: "Lat Pulldown",
+      movementPattern: "Vertical Pull",
+      muscleGroup: "Back",
+      sets: 4,
+      reps: 10,
+      ...exerciseDatabase["Lat Pulldown"],
+    });
+    upperExercises.push({
+      id: "ex-upper-3",
+      name: "Overhead Press",
+      movementPattern: "Vertical Push",
+      muscleGroup: "Shoulders",
+      sets: 3,
+      reps: 8,
+      reasoning: "Vertical pressing pattern for anterior deltoids. Complements horizontal pressing for complete shoulder development.",
+      alternatives: ["Dumbbell Shoulder Press", "Arnold Press", "Push Press"],
+      previousSession: { weight: 135, reps: 8 },
+    });
+    if (profile.focusAreas.includes("Arms")) {
+      upperExercises.push({
+        id: "ex-upper-4",
+        name: "Zottman Curls",
+        movementPattern: "Isolation",
+        muscleGroup: "Biceps",
+        sets: 3,
+        reps: 10,
+        ...exerciseDatabase["Zottman Curls"],
+      });
+    }
+    upperExercises.push({
+      id: "ex-upper-5",
+      name: "Face Pulls",
+      movementPattern: "Horizontal Pull",
+      muscleGroup: "Rear Delts",
+      sets: 3,
+      reps: 15,
+      ...exerciseDatabase["Face Pulls"],
+    });
+    
+    days.push({
+      id: "upper-1",
+      name: "Upper Body Day",
+      exercises: upperExercises,
+    });
+    
+    // Lower Day
+    const lowerExercises: Exercise[] = [];
+    if (hasMobility) {
+      lowerExercises.push({
+        id: "warmup-lower",
+        name: "Dynamic Lower Body Warmup",
+        movementPattern: "Warmup",
+        muscleGroup: "Legs",
+        sets: 1,
+        reps: 10,
+        reasoning: "Hip mobility and activation drills. Prepares hip flexors, glutes, and quads for heavy loading.",
+        alternatives: [],
+      });
+    }
+    lowerExercises.push({
+      id: "ex-lower-1",
+      name: "Back Squat",
+      movementPattern: "Squat",
+      muscleGroup: "Legs",
+      sets: 4,
+      reps: 8,
+      ...exerciseDatabase["Back Squat"],
+    });
+    lowerExercises.push({
+      id: "ex-lower-2",
+      name: "Romanian Deadlift",
+      movementPattern: "Hip Hinge",
+      muscleGroup: "Legs",
+      sets: 3,
+      reps: 8,
+      reasoning: "Hamstring and glute developer with emphasis on eccentric loading. Complements squat pattern.",
+      alternatives: ["Leg Curls", "Good Mornings", "Single-Leg RDL"],
+      previousSession: { weight: 225, reps: 8 },
+    });
+    if (profile.focusAreas.includes("Glutes")) {
+      lowerExercises.push({
+        id: "ex-lower-3",
+        name: "Hip Thrust",
+        movementPattern: "Hip Extension",
+        muscleGroup: "Glutes",
+        sets: 3,
+        reps: 12,
+        reasoning: "Direct glute activation with high loading potential. Targets glute max for size and strength.",
+        alternatives: ["Bulgarian Split Squat", "Lunges", "Step-Ups"],
+        previousSession: { weight: 185, reps: 12 },
+      });
+    }
+    
+    days.push({
+      id: "lower-1",
+      name: "Lower Body Day",
+      exercises: lowerExercises,
+    });
+  } else if (split === "Full Body") {
+    // Full Body Day
+    const fullBodyExercises: Exercise[] = [];
+    if (hasMobility) {
+      fullBodyExercises.push({
+        id: "warmup-full",
+        name: "Dynamic Full Body Warmup",
+        movementPattern: "Warmup",
+        muscleGroup: "Full Body",
+        sets: 1,
+        reps: 10,
+        reasoning: "Complete warmup targeting all major joints and muscle groups. Prepares body for full body training.",
+        alternatives: [],
+      });
+    }
+    fullBodyExercises.push({
+      id: "ex-full-1",
+      name: "Back Squat",
+      movementPattern: "Squat",
+      muscleGroup: "Legs",
+      sets: 3,
+      reps: 8,
+      ...exerciseDatabase["Back Squat"],
+    });
+    fullBodyExercises.push({
+      id: "ex-full-2",
+      name: "Barbell Bench Press",
+      movementPattern: "Horizontal Push",
+      muscleGroup: "Chest",
+      sets: 3,
+      reps: 8,
+      ...exerciseDatabase["Barbell Bench Press"],
+    });
+    fullBodyExercises.push({
+      id: "ex-full-3",
+      name: "Lat Pulldown",
+      movementPattern: "Vertical Pull",
+      muscleGroup: "Back",
+      sets: 3,
+      reps: 10,
+      ...exerciseDatabase["Lat Pulldown"],
+    });
+    fullBodyExercises.push({
+      id: "ex-full-4",
+      name: "Overhead Press",
+      movementPattern: "Vertical Push",
+      muscleGroup: "Shoulders",
+      sets: 3,
+      reps: 8,
+      reasoning: "Vertical pressing pattern for anterior deltoids. Complements horizontal pressing for complete shoulder development.",
+      alternatives: ["Dumbbell Shoulder Press", "Arnold Press", "Push Press"],
+      previousSession: { weight: 135, reps: 8 },
+    });
+    if (profile.focusAreas.includes("Arms")) {
+      fullBodyExercises.push({
+        id: "ex-full-5",
+        name: "Zottman Curls",
+        movementPattern: "Isolation",
+        muscleGroup: "Biceps",
+        sets: 2,
+        reps: 10,
+        ...exerciseDatabase["Zottman Curls"],
+      });
+    }
+    
+    days.push({
+      id: "fullbody-1",
+      name: "Full Body Day",
+      exercises: fullBodyExercises,
+    });
+  } else if (split === "Arnold Split") {
+    // Arnold Split: Chest/Back, Shoulders/Arms, Legs
+    // Chest/Back Day
+    const chestBackExercises: Exercise[] = [];
+    if (hasMobility) {
+      chestBackExercises.push({
+        id: "warmup-arnold-1",
+        name: "Dynamic Upper Body Warmup",
+        movementPattern: "Warmup",
+        muscleGroup: "Upper Body",
+        sets: 1,
+        reps: 10,
+        reasoning: "Prepares chest, back, and shoulders for heavy training.",
+        alternatives: [],
+      });
+    }
+    chestBackExercises.push({
+      id: "ex-arnold-1",
+      name: "Barbell Bench Press",
+      movementPattern: "Horizontal Push",
+      muscleGroup: "Chest",
+      sets: 4,
+      reps: 8,
+      ...exerciseDatabase["Barbell Bench Press"],
+    });
+    chestBackExercises.push({
+      id: "ex-arnold-2",
+      name: "Lat Pulldown",
+      movementPattern: "Vertical Pull",
+      muscleGroup: "Back",
+      sets: 4,
+      reps: 10,
+      ...exerciseDatabase["Lat Pulldown"],
+    });
+    if (profile.focusAreas.includes("Chest")) {
+      chestBackExercises.push({
+        id: "ex-arnold-3",
+        name: "Incline Cable Fly",
+        movementPattern: "Isolation",
+        muscleGroup: "Chest",
+        sets: 3,
+        reps: 12,
+        ...exerciseDatabase["Incline Cable Fly"],
+      });
+    }
+    
+    days.push({
+      id: "arnold-1",
+      name: "Chest & Back Day",
+      exercises: chestBackExercises,
+    });
+    
+    // Shoulders/Arms Day
+    const shouldersArmsExercises: Exercise[] = [];
+    if (hasMobility) {
+      shouldersArmsExercises.push({
+        id: "warmup-arnold-2",
+        name: "Dynamic Shoulder Warmup",
+        movementPattern: "Warmup",
+        muscleGroup: "Shoulders",
+        sets: 1,
+        reps: 10,
+        reasoning: "5-minute dynamic warmup targeting shoulder mobility and activation.",
+        alternatives: [],
+      });
+    }
+    shouldersArmsExercises.push({
+      id: "ex-arnold-4",
+      name: "Overhead Press",
+      movementPattern: "Vertical Push",
+      muscleGroup: "Shoulders",
+      sets: 4,
+      reps: 8,
+      reasoning: "Vertical pressing pattern for anterior deltoids.",
+      alternatives: ["Dumbbell Shoulder Press", "Arnold Press", "Push Press"],
+      previousSession: { weight: 135, reps: 8 },
+    });
+    shouldersArmsExercises.push({
+      id: "ex-arnold-5",
+      name: "Face Pulls",
+      movementPattern: "Horizontal Pull",
+      muscleGroup: "Rear Delts",
+      sets: 3,
+      reps: 15,
+      ...exerciseDatabase["Face Pulls"],
+    });
+    if (profile.focusAreas.includes("Arms")) {
+      shouldersArmsExercises.push({
+        id: "ex-arnold-6",
+        name: "Zottman Curls",
+        movementPattern: "Isolation",
+        muscleGroup: "Biceps",
+        sets: 3,
+        reps: 10,
+        ...exerciseDatabase["Zottman Curls"],
+      });
+      shouldersArmsExercises.push({
+        id: "ex-arnold-7",
+        name: "Tricep Dips",
+        movementPattern: "Isolation",
+        muscleGroup: "Triceps",
+        sets: 3,
+        reps: 10,
+        reasoning: "Tricep finisher with bodyweight progression.",
+        alternatives: ["Overhead Tricep Extension", "Close-Grip Bench", "Cable Pushdowns"],
+        previousSession: { weight: 0, reps: 10 },
+      });
+    }
+    
+    days.push({
+      id: "arnold-2",
+      name: "Shoulders & Arms Day",
+      exercises: shouldersArmsExercises,
+    });
+    
+    // Legs Day
+    const arnoldLegExercises: Exercise[] = [];
+    if (hasMobility) {
+      arnoldLegExercises.push({
+        id: "warmup-arnold-3",
+        name: "Dynamic Lower Body Warmup",
+        movementPattern: "Warmup",
+        muscleGroup: "Legs",
+        sets: 1,
+        reps: 10,
+        reasoning: "Hip mobility and activation drills.",
+        alternatives: [],
+      });
+    }
+    arnoldLegExercises.push({
+      id: "ex-arnold-8",
+      name: "Back Squat",
+      movementPattern: "Squat",
+      muscleGroup: "Legs",
+      sets: 4,
+      reps: 8,
+      ...exerciseDatabase["Back Squat"],
+    });
+    arnoldLegExercises.push({
+      id: "ex-arnold-9",
+      name: "Romanian Deadlift",
+      movementPattern: "Hip Hinge",
+      muscleGroup: "Legs",
+      sets: 3,
+      reps: 8,
+      reasoning: "Hamstring and glute developer.",
+      alternatives: ["Leg Curls", "Good Mornings", "Single-Leg RDL"],
+      previousSession: { weight: 225, reps: 8 },
+    });
+    if (profile.focusAreas.includes("Glutes")) {
+      arnoldLegExercises.push({
+        id: "ex-arnold-10",
+        name: "Hip Thrust",
+        movementPattern: "Hip Extension",
+        muscleGroup: "Glutes",
+        sets: 3,
+        reps: 12,
+        reasoning: "Direct glute activation.",
+        alternatives: ["Bulgarian Split Squat", "Lunges", "Step-Ups"],
+        previousSession: { weight: 185, reps: 12 },
+      });
+    }
+    
+    days.push({
+      id: "arnold-3",
+      name: "Legs Day",
+      exercises: arnoldLegExercises,
+    });
   }
 
   let rationale = `Generated a ${split} split optimized for ${profile.goal.toLowerCase()}. `;
@@ -370,9 +732,16 @@ export function getWorkoutDayDescription(dayName: string): string {
     "Push Day 1": "Focus on chest, shoulders, and triceps. Heavy compound movements followed by isolation work.",
     "Pull Day 1": "Target back, biceps, and rear delts. Vertical and horizontal pulling patterns for complete back development.",
     "Leg Day 1": "Complete lower body training: quads, hamstrings, glutes, and calves. Heavy squats and deadlifts.",
+    "Upper Body Day": "Upper body focus: chest, back, shoulders, arms. Combines pushing and pulling movements for complete upper body development.",
+    "Lower Body Day": "Complete lower body training: quads, hamstrings, glutes, and calves. Heavy squats and deadlifts.",
+    "Full Body Day": "Complete body workout hitting all major muscle groups in one session. Great for time efficiency and overall strength.",
+    "Chest & Back Day": "Arnold Split: Focus on chest and back together. Combines horizontal pushing and pulling for balanced upper body development.",
+    "Shoulders & Arms Day": "Arnold Split: Shoulder and arm specialization day. Targets deltoids, biceps, and triceps for complete arm development.",
     "Dynamic Shoulder Warmup": "5-minute mobility routine to prepare shoulders for heavy pressing. Includes rotator cuff activation and scapular mobility drills.",
     "Dynamic Back Warmup": "Activates lats and scapular retractors. Prepares posterior chain for heavy pulling movements.",
     "Dynamic Lower Body Warmup": "Hip mobility and activation drills. Prepares hip flexors, glutes, and quads for heavy loading.",
+    "Dynamic Full Body Warmup": "Complete warmup targeting all major joints and muscle groups. Prepares body for full body training.",
+    "Dynamic Upper Body Warmup": "Prepares chest, back, and shoulders for heavy training with mobility and activation drills.",
   };
   
   // Try exact match first
@@ -395,6 +764,12 @@ export function getWorkoutDayDescription(dayName: string): string {
   }
   if (dayName.includes("Full Body")) {
     return "Complete body workout hitting all major muscle groups in one session. Great for time efficiency.";
+  }
+  if (dayName.includes("Chest") && dayName.includes("Back")) {
+    return "Arnold Split: Focus on chest and back together. Combines horizontal pushing and pulling for balanced upper body development.";
+  }
+  if (dayName.includes("Shoulder") && dayName.includes("Arm")) {
+    return "Arnold Split: Shoulder and arm specialization day. Targets deltoids, biceps, and triceps for complete arm development.";
   }
   
   return "Workout designed to target specific muscle groups with optimal exercise selection.";

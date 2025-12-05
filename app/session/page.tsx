@@ -41,9 +41,15 @@ function SessionContent() {
       return;
     }
 
+    if (!plan.days || plan.days.length === 0) {
+      console.error("Plan has no days");
+      router.push("/onboarding");
+      return;
+    }
+
     if (dayId) {
       const workout = plan.days.find((d) => d.id === dayId);
-      if (workout) {
+      if (workout && workout.exercises && workout.exercises.length > 0) {
         setCurrentWorkout(workout);
         // Load previous session data for exercises
         workout.exercises.forEach((ex) => {
@@ -59,12 +65,16 @@ function SessionContent() {
           }
         });
       } else {
+        console.error("Workout not found or has no exercises", { dayId, workout });
         router.push("/plan");
       }
     } else {
       // Default to first workout day
-      if (plan.days.length > 0) {
+      if (plan.days.length > 0 && plan.days[0].exercises && plan.days[0].exercises.length > 0) {
         setCurrentWorkout(plan.days[0]);
+      } else {
+        console.error("First workout day has no exercises");
+        router.push("/onboarding");
       }
     }
   }, [plan, dayId, router]);
@@ -198,16 +208,19 @@ function SessionContent() {
             <ArrowLeft className="w-4 h-4" />
             Back to Plan
           </button>
-          <h1 className="text-3xl font-bold mb-2">{currentWorkout.name}</h1>
+          <h1 className="text-3xl font-bold mb-2">{currentWorkout.name || "Workout"}</h1>
           <p className="text-slate-400 mb-2">Track your sets with RIR</p>
-          <p className="text-sm text-slate-500 bg-slate-900/50 border border-slate-800 rounded-lg p-3">
-            {getWorkoutDayDescription(currentWorkout.name)}
-          </p>
+          {currentWorkout.name && (
+            <p className="text-sm text-slate-500 bg-slate-900/50 border border-slate-800 rounded-lg p-3">
+              {getWorkoutDayDescription(currentWorkout.name)}
+            </p>
+          )}
         </div>
 
         {/* Exercise List */}
         <div className="space-y-4 mb-6">
-          {currentWorkout.exercises.map((exercise, index) => {
+          {currentWorkout.exercises && currentWorkout.exercises.length > 0 ? (
+            currentWorkout.exercises.map((exercise, index) => {
             const completedSets = getCompletedSets(exercise.id);
             const isComplete = completedSets >= exercise.sets;
 
@@ -277,7 +290,18 @@ function SessionContent() {
                 )}
               </motion.div>
             );
-          })}
+          })
+          ) : (
+            <div className="p-6 bg-slate-900 border-2 border-slate-800 rounded-xl text-center">
+              <p className="text-slate-400">No exercises found for this workout.</p>
+              <button
+                onClick={() => router.push("/onboarding")}
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              >
+                Create New Plan
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Log Set Modal */}
